@@ -1,57 +1,57 @@
+// ===============================================================================
+// DEPENDENCIES
+// We need to include the path package to get the correct file path for our html
+// ===============================================================================
 const { v4: uuidv4 } = require('uuid');
 const fs = require("fs");
+const noteDataBase = require("../db/db.json");
 
-const db = ("../db/db.json");
-
+// Routing
 module.exports = function(app) {
 
-
+// Intializes the API GET Request
   app.get("/api/notes", function(req, res) {
-      res.json(db)
+      res.json(noteDataBase);
     });
   
-
-
+// Intializes the API POST Request
   app.post("/api/notes", function(req, res) {
+    
     let id = uuidv4();
 
-    postNote = {
+    let postNote = {
       id: id,
       title: req.body.title,
       text: req.body.text
     };
 
-    db.push(postNote);
+    noteDataBase.push(postNote);
 
-    fs.writeFile(db, JSON.stringify(db, null, 2), (err) =>{
-      if (err) thorw (err);
+    fs.writeFile("../db/db.json", JSON.stringify(noteDataBase), function(error) {
       console.log("Your note was posted");
     });
 
-    res.json(db);
+    res.json(noteDataBase);
 
   });
 
-
-
-
+// Intializes the API DELETE Request
   app.delete("/api/notes/:id", function (req, res) {
-    let id = req.params.id;
-    let info = JSON.parse(data);
-    info = info.filter(function(note) {
-      if (id != note.id) {
-        return true;
-      }
-      else {
-        return false;
-      };
-    });
-    fs.writeFile("../db/db/.json", JSON.stringify(info), function(error) {
-      if (error)
-      throw error;
-      res.end(console.log("Your note has been deleted"))
-    })
-  });
 
+    let id = req.params.id;
+
+    for (const i in noteDataBase) {
+      
+      if(noteDataBase[i].id === id){
+        noteDataBase.splice(i,1);
+        break;
+
+      };
+    }
+
+    fs.writeFile("../db/db/.json", JSON.stringify(noteDataBase), function(error) {
+      res.end(console.log("Your note has been deleted"));
+    });
+  });
 
 };

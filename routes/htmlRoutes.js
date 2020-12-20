@@ -5,11 +5,7 @@
 const path = require("path");
 const fs = require("fs");
 
-
-// ===============================================================================
-// ROUTING
-// ===============================================================================
-
+//Routing
 module.exports = function(app) {
 
   //Points to the notes.html file
@@ -17,7 +13,7 @@ module.exports = function(app) {
     res.sendFile(path.join(__dirname, "../public/notes.html"));
   });
 
-  // 
+  //Points to the index.html
   app.get("*", function(req, res) {
     res.sendFile(path.join(__dirname, "../public/index.html"));
   });
